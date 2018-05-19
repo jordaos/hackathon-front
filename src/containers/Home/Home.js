@@ -6,8 +6,8 @@ class Home extends Component {
     return (
       <div>
         <Link to="/">Home</Link> | 
-        <Link to="/hackathon/add">Add Hackathon</Link> | 
-        <Link to="/equipe/add">Add Equipe</Link>
+        <Link to="/hackathon">Hackathons</Link> | 
+        <Link to="/hackathon/add">Add Hackathon</Link>
       </div>
     );
   }

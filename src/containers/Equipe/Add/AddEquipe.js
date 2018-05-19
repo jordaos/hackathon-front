@@ -1,17 +1,31 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import axios from 'axios'
 import AddMembroForm from '../../../components/AddMembroForm';
+import './AddEquipe.css';
 
 class AddEquipe extends Component {
-  constructor() {
+  constructor(props) {
     super();
     this.state = {
-      equipe: {nome: ''}
+      equipe: {
+        nome: ''
+      },
+      hackathonId: props.match.params.id,
+      hackathon: {nome: '', descricao: '', local: '', data: '', numParticipantesEquipe: 0, numEquipes: 0}
     }
     this.onSubmit = this.onSubmit.bind(this);
 
     this._URL = "http://localhost:8080/equipe/";
+    this._URLHACKA = "http://localhost:8080/hackathon/";
+  }
+
+  componentDidMount() {
+    axios.get(`${this._URLHACKA}/${this.state.hackathonId}`)
+      .then(res => {
+        const hackathon = res.data;
+        this.setState({ hackathon });
+      });
   }
 
   onSubmit () {
@@ -33,7 +47,9 @@ class AddEquipe extends Component {
             onChange={this.handleChange.bind(this, 'nome')}/>
         </FormGroup>
 
-        <AddMembroForm />
+        {[...Array(this.state.hackathon.numParticipantesEquipe)].map((x, i) =>
+          <AddMembroForm key={i}/>
+        )}
         
         <Button onClick={this.onSubmit}>Submit</Button>
       </Form>

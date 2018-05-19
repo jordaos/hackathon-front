@@ -1,37 +1,43 @@
-import React, { Component } from 'react';
-import { Card, CardBody, FormGroup, Label, Input } from 'reactstrap';
+import React from 'react';
+import { Card, CardBody, Label, Input, Container, Row, Col } from 'reactstrap';
 
 class AddMembroForm extends React.Component {
   render() {
     return (
-      <div>
+      <div style={{margin: '10px 0'}}>
         <Card>
           <CardBody>
-            <FormGroup>
-              <Label>Nome</Label>
-              <Input type="text" />
-            </FormGroup>
-            <FormGroup>
-              <Label>E-mail</Label>
-              <Input type="text" />
-            </FormGroup>
-            <FormGroup>
-              <Label>Foto</Label>
-              <Input type="file" />
-            </FormGroup>
-            <FormGroup>
-              <Label>Telefone</Label>
-              <Input type="text" />
-            </FormGroup>
-            <FormGroup>
-              <Label for="selectTam">Tamanho da camisa</Label>
-              <Input type="select" id="selectTam">
-                <option>P</option>
-                <option>M</option>
-                <option>G</option>
-                <option>GG</option>
-              </Input>
-            </FormGroup>
+            <Container>
+              <Row>
+                <Col xs="6">
+                  <Label>Nome</Label>
+                  <Input type="text" />
+                </Col>
+                <Col xs="6">
+                  <Label>E-mail</Label>
+                  <Input type="text" />
+                </Col>
+              </Row>
+              <Row style={{marginTop: '10px'}}>
+                <Col xs="4">
+                  <Label>Telefone</Label>
+                  <Input type="text" />
+                </Col>
+                <Col xs="2">
+                  <Label for="selectTam">Tamanho da camisa</Label>
+                  <Input type="select" id="selectTam">
+                    <option>P</option>
+                    <option>M</option>
+                    <option>G</option>
+                    <option>GG</option>
+                  </Input>
+                </Col>
+                <Col xs="6">
+                  <Label>Foto</Label>
+                  <Input type="file" />
+                </Col>
+              </Row>
+            </Container>
           </CardBody>
         </Card>
       </div>
