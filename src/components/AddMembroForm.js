@@ -1,31 +1,121 @@
 import React from 'react';
 import { Card, CardBody, Label, Input, Container, Row, Col } from 'reactstrap';
+import { Typeahead } from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 class AddMembroForm extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      participante: {
+        nome: '',
+        email: '',
+        telefone: '',
+        tamCamisa: 'P'
+      },
+      disabled: false,
+      emailValid: true
+    }
+  }
+
+  handleChange(field, e) {
+    const value = e.target.value;
+    let emailValid = true;
+    if (field === 'email') {
+      const participantesWithThisEmail = this.props.participantes.filter((participante) => {
+        return participante.email === value
+      });
+
+      if (participantesWithThisEmail.length > 0) {
+        emailValid = false;
+      }
+    }
+
+    const participante = Object.assign({}, this.state.participante, { [field]: value });
+    this.setState(Object.assign({}, this.state, { participante, emailValid }));
+
+    this.props.onHandleParticipanteChanges(this.state.participante, this.props.index);
+  }
+
+  _handleNomeChange = (e) => {
+    if (e.length > 0) {
+      const participante = e[0];
+      console.log(this.props.participantesNessaEquipe.filter(p => p.email === participante.email));
+      if (this.props.equipes.participantes !== undefined && 
+         (this.props.equipes.participantes.filter(p => p.email === participante.email).length > 0 ||
+         this.props.participantesNessaEquipe.filter(p => p.email === participante.email).length > 0)) {
+          this.setState({ emailValid: false });
+      }else if (this.props.participantesNessaEquipe.filter(p => p.email === participante.email).length > 0) {
+          this.setState({ emailValid: false });
+      } else {
+        this.setState({ disabled: true, participante: participante }, () => {
+          this.props.onHandleParticipanteChanges(this.state.participante, this.props.index);
+        });
+      }
+    } else {
+      this.setState({
+        disabled: false, participante: {
+          email: '',
+          telefone: '',
+          tamCamisa: 'P'
+        }
+      });
+    }
+  }
+
+  _handleInputChange = (text, event) => {
+    const participantesWithThisName = this.props.participantes.filter((participante) => {
+      return participante.nome === text
+    });
+    if (participantesWithThisName.length > 0)
+      this.setState({ disabled: true, participante: participantesWithThisName[0] });
+
+    const participante = Object.assign({}, this.state.participante, { nome: text });
+    this.setState(Object.assign({}, this.state, { participante }), () => {
+      this.props.onHandleParticipanteChanges(this.state.participante, this.props.index);
+    });
+  }
+
   render() {
     return (
-      <div style={{margin: '10px 0'}}>
+      <div style={{ margin: '10px 0' }}>
         <Card>
           <CardBody>
             <Container>
               <Row>
                 <Col xs="6">
                   <Label>Nome</Label>
-                  <Input type="text" />
+                  <Typeahead
+                    emptyLabel={false}
+                    minLength={3}
+                    paginate
+                    labelKey="nome"
+                    value={this.state.participante.nome}
+                    options={this.props.participantes}
+                    onChange={this._handleNomeChange}
+                    onInputChange={this._handleInputChange}
+                  />
                 </Col>
                 <Col xs="6">
                   <Label>E-mail</Label>
-                  <Input type="text" />
+                  <Input type="text" disabled={this.state.disabled}
+                    value={this.state.participante.email}
+                    invalid={!this.state.emailValid}
+                    onChange={this.handleChange.bind(this, 'email')} />
                 </Col>
               </Row>
-              <Row style={{marginTop: '10px'}}>
+              <Row style={{ marginTop: '10px' }}>
                 <Col xs="4">
                   <Label>Telefone</Label>
-                  <Input type="text" />
+                  <Input type="text" disabled={this.state.disabled}
+                    value={this.state.participante.telefone}
+                    onChange={this.handleChange.bind(this, 'telefone')} />
                 </Col>
                 <Col xs="2">
                   <Label for="selectTam">Tamanho da camisa</Label>
-                  <Input type="select" id="selectTam">
+                  <Input type="select" disabled={this.state.disabled} id="selectTam"
+                    value={this.state.participante.tamCamisa}
+                    onChange={this.handleChange.bind(this, 'tamCamisa')}>
                     <option>P</option>
                     <option>M</option>
                     <option>G</option>
