@@ -15,7 +15,7 @@ class Login extends Component {
     }
     this.onSubmit = this.onSubmit.bind(this);
 
-    this._URL = "http://localhost:8080/login";
+    this._URL = "http://hackathon174.herokuapp.com/login";
   }
 
   onSubmit() {

@@ -6,6 +6,7 @@ import './App.css';
 import AddEquipe from '../Equipe/Add/AddEquipe';
 import ListHackathon from '../Hackathon/List/ListHackathon';
 import Login from '../Login/Login';
+import ListEquipe from '../Equipe/List/ListEquipe';
 
 class App extends Component {
   render() {
@@ -15,6 +16,7 @@ class App extends Component {
             <Route exact path="/" component={Home} />
             <Route exact path="/hackathon" component={ListHackathon} />
             <Route exact path="/hackathon/:id/equipe/add" component={AddEquipe} />
+            <Route exact path="/hackathon/:id/equipe" component={ListEquipe} />
             <Route exact path="/hackathon/add" component={AddHackathon} />
             <Route exact path="/login" component={Login} />
           </div>

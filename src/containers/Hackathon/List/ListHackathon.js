@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListGroup, ListGroupItem, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Label } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 // Import React Table
@@ -12,17 +12,18 @@ class ListHackathon extends Component {
     this.state = {
       hackathons: [],
       token: '',
+      userEmail: '',
       modal: false,
       hackathonId: 0
     }
 
-    this._URL = "http://localhost:8080/hackathon/";
+    this._URL = "http://hackathon174.herokuapp.com/hackathon/";
     this.toggle = this.toggle.bind(this);
     this.encerrar = this.encerrar.bind(this);
   }
 
   componentDidMount() {
-    this.setState({token: localStorage.getItem('token')}, () => {
+    this.setState({token: localStorage.getItem('token'), userEmail: localStorage.getItem('userEmail')}, () => {
       axios.defaults.headers.common['Authorization'] = this.state.token;
       axios.get(this._URL)
         .then(res => {
@@ -66,12 +67,6 @@ class ListHackathon extends Component {
   render() {
     return (
       <div>
-        <ListGroup>
-          {this.state.hackathons.map(hackathon =>
-            <ListGroupItem key={hackathon.id} tag="a" href={"/hackathon/" + hackathon.id + "/equipe/add"}>{hackathon.nome}</ListGroupItem>
-          )}
-        </ListGroup>
-
         <ReactTable
           data={this.state.hackathons}
           columns={[
@@ -88,8 +83,10 @@ class ListHackathon extends Component {
               accessor: "id",
               Cell: row => (
                 <div>
-                  <Link to={"/hackathon/" + row.value + "/equipe"}>Visualizar</Link>
-                  <Button color="danger" hidden={this.isEncerrado(this, row.value)} onClick={this.modalEncerrar.bind(this, row.value)}>Encerrar</Button>
+                  <Label hidden={!this.isEncerrado(this, row.value)}>Encerrado</Label>
+                  <Link to={"/hackathon/" + row.value + "/equipe/add"} hidden={this.isEncerrado(this, row.value) || this.state.userEmail === 'adm@admin.com'}>Participar</Link>
+                  <Link to={"/hackathon/" + row.value + "/equipe"} hidden={this.state.userEmail !== 'adm@admin.com'}>Visualizar</Link>
+                  <Button color="danger" hidden={this.isEncerrado(this, row.value) && (this.state.userEmail !== 'adm@admin.com')} onClick={this.modalEncerrar.bind(this, row.value)}>Encerrar</Button>
                 </div>
               )
             }
