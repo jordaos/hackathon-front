@@ -5,21 +5,20 @@ import AddHackathon from '../Hackathon/Add/AddHackathon';
 import './App.css';
 import AddEquipe from '../Equipe/Add/AddEquipe';
 import ListHackathon from '../Hackathon/List/ListHackathon';
+import Login from '../Login/Login';
 
 class App extends Component {
   render() {
     return (
-      <div>
         <Router>
-          <div>
+          <div style={{display: 'contents'}}>
             <Route exact path="/" component={Home} />
             <Route exact path="/hackathon" component={ListHackathon} />
             <Route exact path="/hackathon/:id/equipe/add" component={AddEquipe} />
             <Route exact path="/hackathon/add" component={AddHackathon} />
+            <Route exact path="/login" component={Login} />
           </div>
         </Router>
-
-      </div>
     );
   }
 }
