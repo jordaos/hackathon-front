@@ -13,7 +13,7 @@ class ParticipanteHome extends Component {
     }
 
     this.handleClick = this.handleClick.bind(this);
-    this._URL = "http://hackathon174.herokuapp.com/participante/";
+    this._URL = "http://localhost:8080/participante/";
   }
 
   componentDidMount() {

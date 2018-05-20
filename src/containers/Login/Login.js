@@ -15,7 +15,7 @@ class Login extends Component {
     }
     this.onSubmit = this.onSubmit.bind(this);
 
-    this._URL = "http://hackathon174.herokuapp.com/login";
+    this._URL = "http://localhost:8080/login";
   }
 
   onSubmit() {
@@ -56,7 +56,7 @@ class Login extends Component {
           value={this.state.user.password}
           onChange={this.handleChange.bind(this, 'password')} />
 
-        <Button onClick={this.onSubmit} block color="success">Submit</Button>
+        <Button onClick={this.onSubmit} block color="success">Entrar</Button>
       </Form>
     );
   }

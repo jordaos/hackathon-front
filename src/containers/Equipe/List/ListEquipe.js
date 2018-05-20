@@ -12,7 +12,7 @@ class ListEquipe extends Component {
       token: ''
     }
 
-    this._URL = "http://hackathon174.herokuapp.com/equipe/";
+    this._URL = "http://localhost:8080/equipe/";
   }
 
   componentDidMount() {
