@@ -11,6 +11,7 @@ class AdminHome extends Component {
             <nav className="nav nav-masthead justify-content-center">
               <Link className="nav-link" to="/">Home</Link>
               <Link className="nav-link" to="/hackathon/add">Adicionar Hackathon</Link>
+              <Link className="nav-link" to="/hackathon">Listar Hackathons</Link>
             </nav>
           </div>
         </header>

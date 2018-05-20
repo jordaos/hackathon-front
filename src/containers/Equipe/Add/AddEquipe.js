@@ -75,6 +75,7 @@ class AddEquipe extends Component {
   }
 
   onHandleParticipanteChanges(participante, index) {
+    // eslint-disable-next-line
     this.state.participantesNessaEquipe[index] = participante;
   }
 
