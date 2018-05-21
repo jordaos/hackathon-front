@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import axios from 'axios'
 import AddMembroForm from '../../../components/AddMembroForm';
@@ -26,9 +26,10 @@ class AddEquipe extends Component {
         email: '',
         telefone: '',
         tamCamisa: '',
-        userEmail: localStorage.getItem('userEmail')
       },
+      userEmail: localStorage.getItem('userEmail'),
       token: localStorage.getItem('token'),
+      modal: false
     }
     this.onSubmit = this.onSubmit.bind(this);
     this.onHandleParticipanteChanges = this.onHandleParticipanteChanges.bind(this);
@@ -76,7 +77,7 @@ class AddEquipe extends Component {
     var self = this;
     axios.post(this._URL, equipe)
       .then(function (response) {
-        console.log(response);
+        self.setState({ modal: true });
       })
       .catch(function (error) {
         let fieldValidationErrors = self.state.formErrors;
@@ -184,6 +185,16 @@ class AddEquipe extends Component {
             </Form>
           </div>
         </div>
+
+        <Modal isOpen={this.state.modal}>
+          <ModalHeader toggle={this.toggle}>Equipe cadastrada com sucesso!</ModalHeader>
+          <ModalBody>
+            O que você deseja fazer agora?
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" tag={Link} to="/">Voltar</Button>
+          </ModalFooter>
+        </Modal>
 
         <footer className="my-5 pt-5 text-muted text-center text-small">
           <p>&copy; Jordão Macedo. <a href="https://jordaos.github.io/">@jordaos</a></p>

@@ -13,7 +13,7 @@ class Home extends Component {
   }
 
   section() {
-    if (this.state.token === '') {
+    if (this.state.token === '' || this.state.token === null) {
       return <Present />
     } else if (this.state.userEmail === 'adm@admin.com') {
       return <AdminHome />

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Table } from 'reactstrap';
+import { Button, Table, Badge } from 'reactstrap';
 import axios from 'axios';
 
 class ParticipanteHome extends Component {
@@ -33,7 +33,7 @@ class ParticipanteHome extends Component {
         console.log(error.response);
       });
 
-      axios.get(`${this._URL}/participante/equipes`)
+    axios.get(`${this._URL}/participante/equipes`)
       .then(res => {
         const equipes = res.data.map(obj => obj);
         this.setState({ equipes });
@@ -55,27 +55,6 @@ class ParticipanteHome extends Component {
       }).catch(function (error) {
         console.log(error.response);
       });
-  }
-
-  renderHackathons() {
-    var divs = [];
-    const size = this.state.hackathons.length;
-    for (var i = 1; i <= 3; i++) {
-      var idx = size - i;
-      var hackathon = this.state.hackathons[idx];
-      if (hackathon !== undefined) {
-        divs.push(
-          <div className="col-md-4" key={i}>
-            <h2>{hackathon.nome}</h2>
-            <p>{hackathon.descricao}</p>
-            <p hidden={hackathon.encerrado || this.state.equipes.some(e => (e.hackathon.id === hackathon.id && e.participando))}>
-              <Button color="success" tag={Link} to={`/hackathon/${hackathon.id}/equipe/add`} >Participar</Button>
-            </p>
-          </div>
-        );
-      }
-    }
-    return divs;
   }
 
   render() {
@@ -139,9 +118,21 @@ class ParticipanteHome extends Component {
                 </tbody>
               </Table>
             </div>
-            <h1 className="text-center">Últimas Hackathons</h1>
             <div className="row">
-              {this.renderHackathons()}
+              {this.state.hackathons.map((hackathon, i) => {
+                var participando = this.state.equipes.some(e => (e.hackathon.id === hackathon.id && e.participando));
+                return (
+                  <div className="col-md-4" key={i}>
+                    <h2>{hackathon.nome}</h2>
+                    <p>{hackathon.descricao}</p>
+                    <p hidden={!hackathon.encerrado}><Badge color="danger">Encerrado</Badge></p>
+                    <p hidden={hackathon.encerrado || participando}>
+                      <Button color="success" tag={Link} to={`/hackathon/${hackathon.id}/equipe/add`} >Participar</Button>
+                    </p>
+                  </div>
+                )
+              })
+              }
             </div>
             <hr />
           </div>

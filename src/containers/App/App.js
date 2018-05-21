@@ -8,6 +8,7 @@ import ListHackathon from '../Hackathon/List/ListHackathon';
 import Login from '../Login/Login';
 import ListEquipe from '../Equipe/List/ListEquipe';
 import CadastroParticipante from '../Participante/Cadastro/CadastroParticipante';
+import ParticipanteList from '../Participante/List/ParticipanteList';
 
 class App extends Component {
   render() {
@@ -19,6 +20,9 @@ class App extends Component {
             <Route exact path="/hackathon/:id/equipe/add" component={AddEquipe} />
             <Route exact path="/hackathon/:id/equipe" component={ListEquipe} />
             <Route exact path="/hackathon/add" component={AddHackathon} />
+            <Route exact path="/hackathon/edit/:hackathon" component={AddHackathon} />
+            <Route exact path="/participante/list" component={ParticipanteList} />
+            <Route exact path="/equipe/:equipeId/participante" component={ParticipanteList} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/cadastro" component={CadastroParticipante} />
           </div>
