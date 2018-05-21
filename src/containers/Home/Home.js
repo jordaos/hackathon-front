@@ -7,13 +7,9 @@ class Home extends Component {
   constructor() {
     super();
     this.state = {
-      userEmail: '',
-      token: ''
+      userEmail: localStorage.getItem('userEmail'),
+      token: localStorage.getItem('token')
     }
-  }
-
-  componentDidMount() {
-    this.setState({token: localStorage.getItem('token'), userEmail: localStorage.getItem('userEmail')});
   }
 
   section() {

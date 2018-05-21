@@ -27,7 +27,6 @@ class Login extends Component {
         self.props.history.push('/');
       })
       .catch(function (error) {
-        console.log(error);
         self.setState({ authError: true });
         setTimeout(() => {
           self.setState({ authError: false });

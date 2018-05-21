@@ -1,30 +1,45 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button } from 'reactstrap';
+import { Button, Table } from 'reactstrap';
 import axios from 'axios';
 
 class ParticipanteHome extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
       hackathons: [],
-      token: '',
-      userEmail: ''
+      equipes: [],
+      hackathonsParticipando: [],
+      userEmail: localStorage.getItem('userEmail'),
+      token: localStorage.getItem('token')
     }
-
+    this._URL = "http://localhost:8080";
     this.handleClick = this.handleClick.bind(this);
-    this._URL = "http://localhost:8080/participante/";
   }
 
   componentDidMount() {
-    this.setState({token: localStorage.getItem('token'), userEmail: localStorage.getItem('userEmail')}, () => {
-      axios.defaults.headers.common['Authorization'] = this.state.token;
-      axios.get(`${this._URL}hackathons`)
-        .then(res => {
-          const hackathons = res.data.map(obj => obj);
-          this.setState({ hackathons });
-        });
-    });
+    axios.defaults.headers.common['Authorization'] = this.state.token;
+    axios.get(`${this._URL}/hackathon/`)
+      .then(res => {
+        const hackathons = res.data.map(obj => obj);
+        this.setState({ hackathons });
+      });
+
+    axios.get(`${this._URL}/participante/hackathons`)
+      .then(res => {
+        const hackathonsParticipando = res.data.map(obj => obj);
+        this.setState({ hackathonsParticipando });
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+
+      axios.get(`${this._URL}/participante/equipes`)
+      .then(res => {
+        const equipes = res.data.map(obj => obj);
+        this.setState({ equipes });
+      }).catch(function (error) {
+        console.log(error.response);
+      });
   }
 
   handleClick() {
@@ -33,20 +48,108 @@ class ParticipanteHome extends Component {
     window.location.reload();
   }
 
+  handleClickCancelSubscription(id, ev) {
+    axios.get(`${this._URL}/equipe/${id}/cancelar`)
+      .then(res => {
+        console.log("Ok");
+      }).catch(function (error) {
+        console.log(error.response);
+      });
+  }
+
+  renderHackathons() {
+    var divs = [];
+    const size = this.state.hackathons.length;
+    for (var i = 1; i <= 3; i++) {
+      var idx = size - i;
+      var hackathon = this.state.hackathons[idx];
+      if (hackathon !== undefined) {
+        divs.push(
+          <div className="col-md-4" key={i}>
+            <h2>{hackathon.nome}</h2>
+            <p>{hackathon.descricao}</p>
+            <p hidden={hackathon.encerrado || this.state.equipes.some(e => (e.hackathon.id === hackathon.id && e.participando))}>
+              <Button color="success" tag={Link} to={`/hackathon/${hackathon.id}/equipe/add`} >Participar</Button>
+            </p>
+          </div>
+        );
+      }
+    }
+    return divs;
+  }
+
   render() {
     return (
-      <div>
-        <header>
-          <div>
-            <h3 className="text-center">Hack<span className="text-success">athon</span></h3>
-            <h5 className="text-center">Participante</h5>
-            <nav className="nav nav-masthead justify-content-center">
-              <Link className="nav-link" to="/">Home</Link>
-              <Link className="nav-link" to="/hackathon">Listar Hackathons</Link>
-              <Button color="link" onClick={this.handleClick}>Sair</Button>
-            </nav>
+      <div className="root">
+        <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+          <a className="navbar-brand" href="/">Hack<span className="text-success">athon</span></a>
+          <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
+
+          <div className="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item active">
+                <Link className="nav-link" to="/">Home</Link>
+              </li>
+            </ul>
+            <ul className="navbar-nav">
+              <li>
+                <Button color="dark" onClick={this.handleClick}>Sair</Button>
+              </li>
+            </ul>
           </div>
-        </header>
+        </nav>
+
+        <main role="main">
+          <div className="jumbotron">
+            <div className="container">
+              <h1 className="display-3">Bem-vindo!</h1>
+              <p>Aqui você pode acessar as hackathons e inscrever-se nelas.</p>
+            </div>
+          </div>
+
+          <div className="container">
+            <div className="row">
+              <Table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Equipe</th>
+                    <th>Data da inscrição</th>
+                    <th>Hackathon</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.equipes.map((el, i) => {
+                    return (
+                      <tr key={i}>
+                        <th scope="row">{el.id}</th>
+                        <td>{el.nome}</td>
+                        <td>{el.data}</td>
+                        <td>{el.hackathon.nome}</td>
+                        <td>
+                          <Button color="danger" hidden={!el.participando} size="sm" onClick={this.handleClickCancelSubscription.bind(this, el.id)}>Cancelar inscrição</Button>
+                        </td>
+                      </tr>
+                    )
+                  })
+                  }
+                </tbody>
+              </Table>
+            </div>
+            <h1 className="text-center">Últimas Hackathons</h1>
+            <div className="row">
+              {this.renderHackathons()}
+            </div>
+            <hr />
+          </div>
+        </main>
+
+        <footer className="container">
+          <p>&copy; Jordão Macedo. <a href="https://jordaos.github.io/">@jordaos</a></p>
+        </footer>
       </div>
     );
   }

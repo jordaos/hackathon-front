@@ -33,7 +33,6 @@ class CadastroParticipante extends Component {
         self.setState({ modal: true });
       })
       .catch(function (error) {
-        console.log(error);
         self.setState({ cadastroError: true });
         setTimeout(() => {
           self.setState({ cadastroError: false });

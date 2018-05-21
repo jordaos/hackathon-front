@@ -4,8 +4,8 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 class AddMembroForm extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       participante: {
         nome: '',
@@ -14,7 +14,15 @@ class AddMembroForm extends React.Component {
         tamCamisa: 'P'
       },
       disabled: false,
-      emailValid: true
+      emailValid: true,
+      isFirst: false
+    }
+  }
+
+  componentWillReceiveProps() {
+    if(this.props.index === 0) {
+      const participante = this.props.currentUser;
+      this.setState({participante, isFirst: true});
     }
   }
 
@@ -40,7 +48,6 @@ class AddMembroForm extends React.Component {
   _handleNomeChange = (e) => {
     if (e.length > 0) {
       const participante = e[0];
-      console.log(this.props.participantesNessaEquipe.filter(p => p.email === participante.email));
       if (this.props.equipes.participantes !== undefined && 
          (this.props.equipes.participantes.filter(p => p.email === participante.email).length > 0 ||
          this.props.participantesNessaEquipe.filter(p => p.email === participante.email).length > 0)) {
@@ -83,7 +90,7 @@ class AddMembroForm extends React.Component {
           <CardBody>
             <Container>
               <Row>
-                <Col xs="6">
+                <Col xs="6" hidden={this.state.isFirst}>
                   <Label>Nome</Label>
                   <Typeahead
                     emptyLabel={false}
@@ -96,9 +103,14 @@ class AddMembroForm extends React.Component {
                     onInputChange={this._handleInputChange}
                   />
                 </Col>
+                <Col xs="6" hidden={!this.state.isFirst}>
+                  <Label>Nome</Label>
+                  <Input type="text" disabled={true}
+                    value={this.state.participante.nome} />
+                </Col>
                 <Col xs="6">
                   <Label>E-mail</Label>
-                  <Input type="text" disabled={this.state.disabled}
+                  <Input type="text" disabled={this.state.disabled || this.state.isFirst}
                     value={this.state.participante.email}
                     invalid={!this.state.emailValid}
                     onChange={this.handleChange.bind(this, 'email')} />
@@ -107,13 +119,14 @@ class AddMembroForm extends React.Component {
               <Row style={{ marginTop: '10px' }}>
                 <Col xs="4">
                   <Label>Telefone</Label>
-                  <Input type="text" disabled={this.state.disabled}
+                  <Input type="text" disabled={this.state.disabled || this.state.isFirst}
                     value={this.state.participante.telefone}
                     onChange={this.handleChange.bind(this, 'telefone')} />
                 </Col>
                 <Col xs="2">
                   <Label for="selectTam">Tamanho da camisa</Label>
-                  <Input type="select" disabled={this.state.disabled} id="selectTam"
+                  <Input type="select" disabled={this.state.disabled || this.state.isFirst} 
+                    id="selectTam"
                     value={this.state.participante.tamCamisa}
                     onChange={this.handleChange.bind(this, 'tamCamisa')}>
                     <option>P</option>
@@ -124,7 +137,7 @@ class AddMembroForm extends React.Component {
                 </Col>
                 <Col xs="6">
                   <Label>Foto</Label>
-                  <Input type="file" />
+                  <Input type="file" disabled={this.state.disabled || this.state.isFirst}/>
                 </Col>
               </Row>
             </Container>
