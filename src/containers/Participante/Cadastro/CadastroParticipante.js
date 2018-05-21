@@ -17,7 +17,7 @@ class CadastroParticipante extends Component {
       cadastroError: false,
       modal: false
     }
-    this._URL = "http://localhost:8080/participante/";
+    this._URL = "https://hackathon174.herokuapp.com/participante/";
     this.onSubmit = this.onSubmit.bind(this);
   }
 

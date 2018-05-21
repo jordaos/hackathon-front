@@ -17,7 +17,7 @@ class ListHackathon extends Component {
       hackathonId: 0
     }
 
-    this._URL = "http://localhost:8080/hackathon/";
+    this._URL = "https://hackathon174.herokuapp.com/hackathon/";
     this.toggle = this.toggle.bind(this);
     this.encerrar = this.encerrar.bind(this);
   }

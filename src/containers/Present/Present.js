@@ -9,7 +9,7 @@ class Present extends Component {
     this.state = {
       hackathons: [],
     }
-    this._URL = "http://localhost:8080/hackathon/";
+    this._URL = "https://hackathon174.herokuapp.com/hackathon/";
   }
 
   componentDidMount() {

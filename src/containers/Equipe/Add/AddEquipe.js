@@ -34,9 +34,9 @@ class AddEquipe extends Component {
     this.onSubmit = this.onSubmit.bind(this);
     this.onHandleParticipanteChanges = this.onHandleParticipanteChanges.bind(this);
 
-    this._URL = "http://localhost:8080/equipe/";
-    this._URLHACKA = "http://localhost:8080/hackathon";
-    this._URLPARTICIPANTE = "http://localhost:8080/participante";
+    this._URL = "https://hackathon174.herokuapp.com/equipe/";
+    this._URLHACKA = "https://hackathon174.herokuapp.com/hackathon";
+    this._URLPARTICIPANTE = "https://hackathon174.herokuapp.com/participante";
   }
 
   componentDidMount() {

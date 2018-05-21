@@ -13,7 +13,7 @@ class ParticipanteHome extends Component {
       userEmail: localStorage.getItem('userEmail'),
       token: localStorage.getItem('token')
     }
-    this._URL = "http://localhost:8080";
+    this._URL = "https://hackathon174.herokuapp.com";
     this.handleClick = this.handleClick.bind(this);
   }
 

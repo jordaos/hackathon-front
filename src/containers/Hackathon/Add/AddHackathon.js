@@ -15,7 +15,7 @@ class AddHackathon extends Component {
     }
     this.onSubmit = this.onSubmit.bind(this);
 
-    this._URL = "http://localhost:8080";
+    this._URL = "https://hackathon174.herokuapp.com";
   }
 
   componentDidMount() {
